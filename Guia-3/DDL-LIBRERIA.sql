@@ -15,11 +15,11 @@ CREATE TABLE distritos(
 	nombreDistrito VARCHAR(45) NOT NULL,
 	idMunicipio CHAR(3) NOT NULL
 );
-CREATE TABLE direcciones(
-	idDireccion INT PRIMARY KEY AUTO_INCREMENT,
-	linea1 VARCHAR(100) NOT NULL,
-	linea2 VARCHAR(50),
-	codigoPostal VARCHAR(7),
+CREATE TABLE direcciones (
+    idDireccion INT PRIMARY KEY AUTO_INCREMENT,
+    linea1 VARCHAR(100) NOT NULL,
+    linea2 VARCHAR(50),
+    codigoPostal VARCHAR(7),
     idDistrito CHAR(5) NOT NULL
 );
 CREATE TABLE sucursales(
@@ -148,15 +148,15 @@ alter table sucursales add foreign key (idDireccion) references direcciones(idDi
 -- llave foranea empleados
 alter table empleados add foreign key (idDireccion) references direcciones(idDireccion);
 alter table empleados add foreign key (idCargo) references cargos(idCargo);
-alter table empleados add foreign key (idSucursal) references sucursale(idSucursal);
+alter table empleados add foreign key (idSucursal) references sucursales(idSucursal);
 -- llave foranea ventas
-alter table ventas add foreign key (idEmpleado) references empleados(idEmpleados);
+alter table ventas add foreign key (idEmpleado) references empleados(idEmpleado);
 alter table ventas add foreign key (idCliente) references clientes(idCliente);
 alter table ventas add foreign key (idMetodoPago) references metodosPago(idMetodoPago);
 -- llave foranea editoreales 
 alter table editoriales add foreign key (idDireccion) references direcciones(idDireccion);
 -- llave foranea libros
-alter table libros add foreign key (idInventario) references inventario(idInventario);
+alter table libros add foreign key (idInventario) references inventarios(idInventario);
 alter table libros add foreign key (idEditorial) references editoriales(idEditorial);
 -- llave foranea pedido
 alter table pedidos add foreign key (idEditorial)  references editoriales(idEditorial);
