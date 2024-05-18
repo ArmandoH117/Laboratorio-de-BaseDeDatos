@@ -139,6 +139,28 @@ CREATE TABLE autores(
 	apellidosAutor VARCHAR(100) NOT NULL,
 	nacionalidad VARCHAR(45) NOT NULL
 );
+-- TABLA ROLES --
+CREATE TABLE roles(
+	idRol INT PRIMARY KEY AUTO_INCREMENT,
+    rol VARCHAR(50) NOT NULL
+);
+CREATE TABLE opciones (
+  idOpcion INT PRIMARY KEY AUTO_INCREMENT,
+  opcion VARCHAR(50) NOT NULL
+);
+CREATE TABLE asignacionRolesOpciones(
+	idAsigancion INT PRIMARY KEY AUTO_INCREMENT,
+    idRol INT NOT NULL,
+    idOpcion INT NOT NULL
+);
+CREATE TABLE usuarios (
+	idUsuario INT PRIMARY KEY AUTO_INCREMENT,
+    usuario VARCHAR(50) NOT NULL,
+    contrasenia VARCHAR(50) NOT NULL,
+    idRol INT NOT NULL,
+    idEmpleado INT NOT NULL
+);
+
 -- Llaves foraneas de direcciones
 alter table municipios add foreign key (idDepartamento) references departamentos(idDepartamento);
 alter table distritos add foreign key (idMunicipio) references municipios(idMunicipio);
@@ -176,6 +198,11 @@ alter table detallesGenerosLibros add foreign key (idLibro) references libros(id
 -- llave detallesAutoresLibros
 alter table detallesAutoresLibros add foreign key (idAutor) references autores(idAutor);
 alter table detallesAutoresLibros add foreign key (idLibro) references libros(idLibro);
+-- Llaves Roles --
+alter table asignacionRolesOpciones add foreign key (idRol) references roles(idRol);
+alter table asignacionRolesOpciones add foreign key (idOpcion) references opciones(idOpcion);
+alter table usuarios add foreign key (idRol) references roles(idRol);
+alter table usuarios add foreign key (idEmpleado) references empleados(idEmpleado);
 
 -- Tablas de direccion
 insert into departamentos values
@@ -686,3 +713,73 @@ insert into departamentos values
     (4,4),
     (5,5),
     (6,6);
+    
+    INSERT INTO roles(idRol, rol) values
+	('1','SysAdmin'), -- 1
+	('2','Gerente'), -- 2
+	('3','Vendedor'), -- 3
+	('4','Cajero'), -- 4
+    ('5', 'Marketing'), -- 5
+	('6','Bodeguero'); -- 6
+    
+    INSERT INTO opciones(idOpcion, opcion) values
+	('1','Gestionar Cuentas'), -- 1
+	('2','Gestionar Departamentos'), -- 2
+	('3','Gestionar Municipios'), -- 3
+	('4','Gestionar Distritos'), -- 4
+	('5','Gestionar Direcciones'), -- 5
+	('6','Gestionar Sucursales'), -- 6
+	('7','Gestionar Empleados'), -- 7
+	('8','Gestionar Usuarios'), -- 8
+	('9','Gestionar Roles'), -- 9
+	('10','Gestionar AsignacionRolesOpciones'), -- 10
+	('11','Gestionar Opciones'), -- 11
+	('12','Gestionar Cargos'), -- 12
+	('13','Gestionar Autores'), -- 13
+	('14','Gestionar Editoriales'), -- 14
+	('15','Gestionar DetalleAutorLibro'), -- 15
+    ('16','Gestionar Libro'), -- 16
+    ('17','Gestionar Generos'), -- 17
+    ('18','Gestionar DetalleGeneroLibro'), -- 18
+    ('19','Gestionar Pedidos'), -- 19
+    ('20','Gestionar DetallePedidos'), -- 20
+    ('21','Gestionar DetalleVenta'), -- 21
+    ('22','Gestionar Inventario'), -- 22
+    ('23','Gestionar FacturasCompras'), -- 23
+    ('24','Gestionar Ventas'), -- 24
+    ('25','Gestionar FacturasVentas'), -- 25
+    ('26','Gestionar Clientes'), -- 26
+    ('27','Gestionar MetodoPago'); -- 27
+    
+    INSERT INTO asignacionRolesOpciones(idAsigancion, idRol, idOpcion) values
+    -- SysAdmin: Todos los permisos --
+    ('1', '1', '1'), ('1', '1', '2'), ('1', '1', '3'), ('1', '1', '4'), ('1', '1', '5'),
+    ('1', '1', '6'), ('1', '1', '7'), ('1', '1', '8'), ('1', '1', '9'), ('1', '1', '10'),
+    ('1', '1', '11'), ('1', '1', '12'), ('1', '1', '13'), ('1', '1', '14'), ('1', '1', '15'),
+    ('1', '1', '16'), ('1', '1', '17'), ('1', '1', '18'), ('1', '1', '19'), ('1', '1', '20'),
+    ('1', '1', '21'), ('1', '1', '22'), ('1', '1', '23'), ('1', '1', '24'), ('1', '1', '25'),
+    ('1', '1', '26'), ('1', '1', '27'),
+    -- Gerente --
+    ('2', '2', '5'), ('2', '2', '6'), ('2', '2', '7'), ('2', '2', '8'), ('2', '2', '9'),
+    ('2', '2', '12'), ('2', '2', '19'), ('2', '2', '22'), ('2', '2', '24'), ('2', '2', '26'),
+    ('2', '2', '27'),
+    -- Vendedor
+    ('3', '3', '5'), ('3', '3', '6'), ('3', '3', '13'), ('3', '3', '14'), ('3', '3', '16'),
+    ('3', '3', '17'), ('3', '3', '19'), ('3', '3', '22'), ('3', '3', '24'), ('3', '3', '26'),
+    ('3', '3', '27'),
+    -- Cajero --
+    ('4', '4', '21'), ('4', '4', '23'), ('4', '4', '24'),('4', '4', '25'), ('4', '4', '26'),
+    ('4', '4', '27'),
+	-- Marketing --
+    ('5', '5', '13'),('5', '5', '14'),('5', '5', '15'),
+    ('5', '5', '16'), ('5', '5', '17'), ('5', '5', '24'),
+    -- Bodegero --
+    ('6', '6', '19'),('6', '6', '22');
+    
+    INSERT INTO usuarios(idUsuario, usuario, contrasenia, idRol, idEmpleado) values
+    ('1', 'JuanRodas', 'Password1', '1', '1'),
+    ('2', 'DiegoSanchez', 'Password2', '2', '2'),
+    ('3', 'RaulGarcia', 'Password3', '3', '3'),
+    ('4', 'MaryPerez', 'Password4', '4', '4'),
+    ('5', 'RaulReyes', 'Password5', '5', '5'),
+    ('6', 'PedroRamirez', 'Password6', '6', '6');
