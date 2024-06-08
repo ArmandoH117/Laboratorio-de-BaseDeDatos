@@ -416,14 +416,14 @@ insert into departamentos values
     ('5', 'Editorial E', 5),
     ('6', 'Editorial F', 6);
     
-    INSERT INTO libros (idLibro, titulo, fechaPublicacion, precioUnitario, idInventario, idEditorial) 
+    INSERT INTO libros (idLibro, titulo, fechaPublicacion, precioUnitario, idInventario, idEditorial, idAutor, idGenero) 
     VALUES
-    ('1', 'Cien años de soledad', '1967-05-30', 25.00, 1, 1),
-    ('2', 'Rayuela', '1963-06-28', 20.00, 2, 2),
-    ('3', 'La ciudad y los perros', '1963-10-19', 22.00, 3, 3),
-    ('4', 'La casa de los espíritus', '1982-01-29', 18.00, 4, 4),
-    ('5', 'Ficciones', '1944-06-01', 15.00, 5, 5),
-    ('6', 'Tensura', '2013-02-20', 12.00, 6, 6);
+    ('1', 'Cien años de soledad', '1967-05-30', 25.00, 1, 1,1,1),
+    ('2', 'Rayuela', '1963-06-28', 20.00, 2, 2,2,2),
+    ('3', 'La ciudad y los perros', '1963-10-19', 22.00, 3, 3,3,3),
+    ('4', 'La casa de los espíritus', '1982-01-29', 18.00, 4, 4,4,4),
+    ('5', 'Ficciones', '1944-06-01', 15.00, 5, 5,5,5),
+    ('6', 'Tensura', '2013-02-20', 12.00, 6, 6,6,6);
     
     INSERT INTO sucursales (idSucursal, nombreSucursal, numeroEmpleado, idDireccion)  
 	VALUES     
@@ -462,14 +462,14 @@ insert into departamentos values
     ('5', 7, 5, 5),
     ('6', 7, 6, 6);
     
-    INSERT INTO ventas(idVenta, montoTotal, fechaVenta, idEmpleado,idCliente,idMetodoPago) 
+    INSERT INTO ventas(idVenta, montoTotal, fechaVenta, idEmpleado,idCliente,idMetodoPago, idLibro) 
     VALUES
-    ('1', 150.00, '2024-04-13', 1, 1, 1),          
-    ('2', 200.00, '2024-04-14', 2, 2, 2),          
-    ('3', 300.00, '2024-04-15', 3, 3, 3),
-    ('4', 250.00, '2024-04-16', 4, 4, 3),
-    ('5', 550.00, '2024-04-17', 5, 5, 2),
-    ('6', 780.00, '2024-04-18', 6, 6, 1);
+    ('1', 150.00, '2024-04-13', 1, 1, 1, 1),          
+    ('2', 200.00, '2024-04-14', 2, 2, 2, 2),          
+    ('3', 300.00, '2024-04-15', 3, 3, 3, 3),
+    ('4', 250.00, '2024-04-16', 4, 4, 3, 4),
+    ('5', 550.00, '2024-04-17', 5, 5, 2, 5),
+    ('6', 780.00, '2024-04-18', 6, 6, 1, 6);
     
     INSERT INTO detalleVentas (idDetalleVenta, idLibro, idVenta)
     values

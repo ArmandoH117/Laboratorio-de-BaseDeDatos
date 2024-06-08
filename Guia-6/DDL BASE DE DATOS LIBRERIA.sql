@@ -55,7 +55,8 @@ create table ventas(
     fechaVenta date not null,
     idEmpleado INT NOT NULL ,
     idCliente INT NOT NULL ,
-    idMetodoPago INT NOT NULL
+    idMetodoPago INT NOT NULL,
+    idLibro INT NOT NULL
 );
 create table metodosPago(
 	idMetodoPago int primary key auto_increment,
@@ -86,7 +87,9 @@ CREATE TABLE libros(
 	fechaPublicacion DATE NOT NULL,
 	precioUnitario DECIMAL NOT NULL,
 	idInventario INT NOT NULL,
-	idEditorial INT NOT NULL
+	idEditorial INT NOT NULL,
+    idGenero INT NOT NULL,
+    idAutor INT NOT NULL
 );
 create table pedidos(
 	idPedido int primary key auto_increment,
@@ -175,11 +178,14 @@ alter table empleados add foreign key (idSucursal) references sucursales(idSucur
 alter table ventas add foreign key (idEmpleado) references empleados(idEmpleado);
 alter table ventas add foreign key (idCliente) references clientes(idCliente);
 alter table ventas add foreign key (idMetodoPago) references metodosPago(idMetodoPago);
+alter table ventas add foreign key (idLibro) references libros(idLibro);
 -- llave foranea editoreales 
 alter table editoriales add foreign key (idDireccion) references direcciones(idDireccion);
 -- llave foranea libros
 alter table libros add foreign key (idInventario) references inventarios(idInventario);
 alter table libros add foreign key (idEditorial) references editoriales(idEditorial);
+alter table libros add foreign key (idGenero) references generos(idGenero);
+alter table libros add foreign key (idAutor) references autores(idAutor);
 -- llave foranea pedido
 alter table pedidos add foreign key (idEditorial)  references editoriales(idEditorial);
 alter table pedidos add foreign key (idEmpleado) references empleados(idEmpleado);
