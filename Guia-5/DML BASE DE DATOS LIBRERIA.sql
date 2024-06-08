@@ -1,208 +1,6 @@
-create database if not exists Libreria;
+-- DML BASE DE DATOS LIBRERIA --
+
 use Libreria;
-
-CREATE TABLE departamentos(
-	idDepartamento CHAR(2) PRIMARY KEY,
-	nombreDepartamento VARCHAR(25) NOT NULL
-);
-CREATE TABLE municipios(
-	idMunicipio CHAR(3) PRIMARY KEY ,
-	nombreMunicipio VARCHAR(30) NOT NULL,
-	idDepartamento CHAR(2) NOT NULL
-);
-CREATE TABLE distritos(
-	idDistrito CHAR(5) PRIMARY KEY ,
-	nombreDistrito VARCHAR(45) NOT NULL,
-	idMunicipio CHAR(3) NOT NULL
-);
-CREATE TABLE direcciones (
-    idDireccion INT PRIMARY KEY AUTO_INCREMENT,
-    linea1 VARCHAR(100) NOT NULL,
-    linea2 VARCHAR(50),
-    codigoPostal VARCHAR(7),
-    idDistrito CHAR(5) NOT NULL
-);
-CREATE TABLE sucursales(
-	idSucursal INT PRIMARY KEY AUTO_INCREMENT,
-	nombreSucursal VARCHAR(100) NOT NULL,
-	numeroEmpleado VARCHAR(100) NOT NULL,
-	idDireccion INT NOT NULL
-);
-create table cargos(
-	idCargo int primary key auto_increment,
-    nombreCargo varchar(50) not null
-);
-create table empleados(
-	idEmpleado int primary key auto_increment,
-    nombreEmpleado varchar(100) not null,
-    apellidoEmpleado varchar(100) not null,
-    fechaDeNacimientoEmpleado DATE not null,
-    generoEmpleado enum('FEMENINO','MASCULINO') not null,
-    duiEmpleado char(12) not null,
-    correoEmpleado varchar(50),
-    numeroTelefonoEmpleado char(10) not null,
-    numeroSucursalEmpleado int not null,
-    numSeguroSocialEmpleado int not null,
-    numAFP int not null,
-    idDireccion INT NOT NULL ,
-    idCargo INT NOT NULL,
-    idSucursal INT NOT NULL
-);
-create table ventas(
-	idVenta int primary key auto_increment,
-    montoTotal decimal not null,
-    fechaVenta date not null,
-    idEmpleado INT NOT NULL ,
-    idCliente INT NOT NULL ,
-    idMetodoPago INT NOT NULL
-);
-create table metodosPago(
-	idMetodoPago int primary key auto_increment,
-    nombreMetodoPago varchar(50) not null
-);
-create table clientes(
-	idCliente int primary key auto_increment,
-    nombresClientes varchar(100) not null,
-    apellidosClientes varchar(100) not null,
-    duiCliente char(12) not null,
-    telefonoCliente varchar(15),
-    correoCliente varchar(50)
-);
-CREATE TABLE inventarios(
-	idInventario INT PRIMARY KEY AUTO_INCREMENT,
-	estante VARCHAR(45) NOT NULL,
-	pasillo VARCHAR(45) NOT NULL,
-	stock VARCHAR(45) NOT NULL
-);
-CREATE TABLE editoriales(
-	idEditorial INT PRIMARY KEY AUTO_INCREMENT,
-	nombreEditorial VARCHAR(45) NOT NULL,
-	idDireccion INT NOT NULL
-);
-CREATE TABLE libros(
-	idLibro INT PRIMARY KEY AUTO_INCREMENT,
-	titulo VARCHAR(45) NOT NULL,
-	fechaPublicacion DATE NOT NULL,
-	precioUnitario DECIMAL NOT NULL,
-	idInventario INT NOT NULL,
-	idEditorial INT NOT NULL
-);
-create table pedidos(
-	idPedido int primary key auto_increment,
-    fechaPedido date not null,
-    cantidadTotal int not null,
-    idEditorial INT NOT NULL,
-    idEmpleado INT NOT NULL
-);
-create table detallePedidos(
-	idDetallePedido int primary key auto_increment,
-    cantidadLibros int not null,
-    idLibro INT NOT NULL,
-    idPedido INT NOT NULL
-);
-create table detalleVentas(
-	idDetalleVenta int primary key auto_increment,
-    idLibro INT NOT NULL,
-	idVenta INT NOT NULL
-);
-create table facturasVentas(
-	idFacturaVenta int primary key auto_increment,
-    fechaFacturaVenta date not null,
-    totalPagarVenta decimal not null,
-    ivaFacturaVenta decimal,
-    creditoFiscalFacturaVenta varchar(45),
-    idDetalleVenta INT NOT NULL
-);
-create table facturasCompras(
-	idFacturaCompra int primary key auto_increment,
-    fechaFacturaCompra date not null,
-    totalPagarCompra decimal not null,
-    ivaFacturaCompra decimal,
-    creditoFiscalFacturaCompra varchar(45),
-    idDetallePedido INT NOT NULL
-);
-CREATE TABLE generos(
-	idGenero INT PRIMARY KEY AUTO_INCREMENT,
-	generoLiterario VARCHAR(45) NOT NULL
-);
-CREATE TABLE detallesGenerosLibros(
-	idGenero INT NOT NULL,
-	idLibro INT NOT NULL
-);
-CREATE TABLE detallesAutoresLibros(
-	idAutor INT NOT NULL,
-	idLibro INT NOT NULL
-);
-CREATE TABLE autores(
-	idAutor INT PRIMARY KEY AUTO_INCREMENT,
-	nombresAutor VARCHAR(100) NOT NULL,
-	apellidosAutor VARCHAR(100) NOT NULL,
-	nacionalidad VARCHAR(45) NOT NULL
-);
--- TABLA ROLES --
-CREATE TABLE roles(
-	idRol INT PRIMARY KEY AUTO_INCREMENT,
-    rol VARCHAR(50) NOT NULL
-);
-CREATE TABLE opciones (
-  idOpcion INT PRIMARY KEY AUTO_INCREMENT,
-  opcion VARCHAR(50) NOT NULL
-);
-CREATE TABLE asignacionRolesOpciones(
-	idAsigancion INT PRIMARY KEY AUTO_INCREMENT,
-    idRol INT NOT NULL,
-    idOpcion INT NOT NULL
-);
-CREATE TABLE usuarios (
-	idUsuario INT PRIMARY KEY AUTO_INCREMENT,
-    usuario VARCHAR(50) NOT NULL,
-    contrasenia VARCHAR(50) NOT NULL,
-    idRol INT NOT NULL,
-    idEmpleado INT NOT NULL
-);
-
--- Llaves foraneas de direcciones
-alter table municipios add foreign key (idDepartamento) references departamentos(idDepartamento);
-alter table distritos add foreign key (idMunicipio) references municipios(idMunicipio);
-alter table direcciones add foreign key (idDistrito) references distritos(idDistrito);
-alter table sucursales add foreign key (idDireccion) references direcciones(idDireccion);
--- llave foranea empleados
-alter table empleados add foreign key (idDireccion) references direcciones(idDireccion);
-alter table empleados add foreign key (idCargo) references cargos(idCargo);
-alter table empleados add foreign key (idSucursal) references sucursales(idSucursal);
--- llave foranea ventas
-alter table ventas add foreign key (idEmpleado) references empleados(idEmpleado);
-alter table ventas add foreign key (idCliente) references clientes(idCliente);
-alter table ventas add foreign key (idMetodoPago) references metodosPago(idMetodoPago);
--- llave foranea editoreales 
-alter table editoriales add foreign key (idDireccion) references direcciones(idDireccion);
--- llave foranea libros
-alter table libros add foreign key (idInventario) references inventarios(idInventario);
-alter table libros add foreign key (idEditorial) references editoriales(idEditorial);
--- llave foranea pedido
-alter table pedidos add foreign key (idEditorial)  references editoriales(idEditorial);
-alter table pedidos add foreign key (idEmpleado) references empleados(idEmpleado);
--- llave foranea detallePedidos
-alter table detallePedidos add foreign key (idLibro) references libros(idLibro);
-alter table detallePedidos add foreign key (idPedido) references pedidos(idPedido);
--- llave foranea detalleVentas
-alter table detalleVentas add foreign key (idLibro) references libros(idLibro);
-alter table detalleVentas add foreign key (idVenta) references ventas(idVenta);
--- llave foranea facturasVentas
-alter table facturasVentas add foreign key (idDetalleVenta) references detalleVentas(idDetalleVenta);
--- llave foranea facturasCompras
-alter table facturasCompras add foreign key (idDetallePedido) references detallePedidos(idDetallePedido);
--- llave detallesGenerosLibros
-alter table detallesGenerosLibros add foreign key (idGenero) references generos(idGenero);
-alter table detallesGenerosLibros add foreign key (idLibro) references libros(idLibro);
--- llave detallesAutoresLibros
-alter table detallesAutoresLibros add foreign key (idAutor) references autores(idAutor);
-alter table detallesAutoresLibros add foreign key (idLibro) references libros(idLibro);
--- Llaves Roles --
-alter table asignacionRolesOpciones add foreign key (idRol) references roles(idRol);
-alter table asignacionRolesOpciones add foreign key (idOpcion) references opciones(idOpcion);
-alter table usuarios add foreign key (idRol) references roles(idRol);
-alter table usuarios add foreign key (idEmpleado) references empleados(idEmpleado);
 
 -- Tablas de direccion
 insert into departamentos values
@@ -579,13 +377,13 @@ insert into departamentos values
     
     INSERT INTO cargos (idCargo, nombreCargo) 
     VALUES
-    ('1', 'Gerente'), 
-    ('2', 'Seguridad'),
-    ('3', 'Conserje'),
-    ('4', 'Vigilante'),
-    ('5', 'Vendedor'), 
-    ('6', 'Cajero'), 
-    ('7', 'Encargado de Almacén');
+    ('1', 'SysAdmin'), 
+    ('2', 'Gerente'),
+    ('3', 'Vendedor'),
+    ('4', 'Cajero'),
+    ('5', 'Marketing'), 
+    ('6', 'Bodeguero'), 
+    ('7', 'RRHH');
     
     INSERT INTO metodosPago (idMetodoPago, nombreMetodoPago) VALUES
     ('1', 'Efectivo'),
@@ -634,7 +432,8 @@ insert into departamentos values
     ('3', 'Librería La Torre de los Libros', '3', '3'),     
     ('4', 'Librería del Sol', '4', '4'),     
     ('5', 'Librería El Pergamino Azul', '5', '5'),
-    ('6', 'Libreria del Abismo', 6, 6);
+    ('6', 'Libreria del Abismo', 6, 6),
+    ('7', 'Libreria Sonsonate', 7, 7);
     
     insert into empleados (idEmpleado, nombreEmpleado,apellidoEmpleado,fechaDeNacimientoEmpleado,generoEmpleado,duiEmpleado,correoEmpleado,numeroTelefonoEmpleado,numeroSucursalEmpleado,numSeguroSocialEmpleado,numAFP, idDireccion, idCargo, idSucursal) values
     ('1', 'Juan Carlos', 'Rodas Gonzalez','1995-01-01','MASCULINO','04523695-5','juan@hotmail.com','9062-5698','1','123456789','1',1,1,1),
@@ -642,7 +441,8 @@ insert into departamentos values
 	('3', 'Raul Edgardo', 'Del Valle Garcia', '1980-03-03', 'MASCULINO','03210987-4','raul@outlook.com', '6598-2548', '3','543216789','3',3,3,3),
 	('4', 'Mary Carmen', 'Perez de Hernandez','1985-04-04','FEMENINO','06789012-1','may@yahoo.com','7965-2526','4','098764321','4',4,4,4),
     ('5', 'Raul Pedro', 'Reyes Perez', '1998-10-12', 'MASCULINO', '06785645-8', 'Raul@gmail.com','7856-7890','5', '098764321', '5',5,5,5),
-    ('6', 'Pedro Raul', 'Ramirez Pereira', '1999-07-12', 'MASCULINO', '09076712-4', 'Pedro@hotmail.com', '7893-7683', '6', '345678912','6',6,6,6);
+    ('6', 'Pedro Raul', 'Ramirez Pereira', '1999-07-12', 'MASCULINO', '09076712-4', 'Pedro@hotmail.com', '7893-7683', '6', '345678912','6',6,6,6),
+    ('7', 'Maria Alejandra', 'Gonzales Aldana', '1997-05-21', 'FEMENINO', '02010301-4', 'Maria@gmail.com', '0621-4367', '7', '782304812', '7',7,7,7);
     
     INSERT INTO pedidos (idPedido, fechaPedido, cantidadTotal, idEditorial, idEmpleado)
 	VALUES 
@@ -720,7 +520,8 @@ insert into departamentos values
 	('3','Vendedor'), -- 3
 	('4','Cajero'), -- 4
     ('5', 'Marketing'), -- 5
-	('6','Bodeguero'); -- 6
+	('6','Bodeguero'), -- 6
+    ('7','RRHH'); -- 7
     
     INSERT INTO opciones(idOpcion, opcion) values
 	('1','Gestionar Cuentas'), -- 1
@@ -751,30 +552,33 @@ insert into departamentos values
     ('26','Gestionar Clientes'), -- 26
     ('27','Gestionar MetodoPago'); -- 27
     
-    INSERT INTO asignacionRolesOpciones(idAsigancion, idRol, idOpcion) values
-    -- SysAdmin: Todos los permisos --
-    ('1', '1', '1'), ('1', '1', '2'), ('1', '1', '3'), ('1', '1', '4'), ('1', '1', '5'),
-    ('1', '1', '6'), ('1', '1', '7'), ('1', '1', '8'), ('1', '1', '9'), ('1', '1', '10'),
-    ('1', '1', '11'), ('1', '1', '12'), ('1', '1', '13'), ('1', '1', '14'), ('1', '1', '15'),
-    ('1', '1', '16'), ('1', '1', '17'), ('1', '1', '18'), ('1', '1', '19'), ('1', '1', '20'),
-    ('1', '1', '21'), ('1', '1', '22'), ('1', '1', '23'), ('1', '1', '24'), ('1', '1', '25'),
-    ('1', '1', '26'), ('1', '1', '27'),
-    -- Gerente --
-    ('2', '2', '5'), ('2', '2', '6'), ('2', '2', '7'), ('2', '2', '8'), ('2', '2', '9'),
-    ('2', '2', '12'), ('2', '2', '19'), ('2', '2', '22'), ('2', '2', '24'), ('2', '2', '26'),
-    ('2', '2', '27'),
-    -- Vendedor
-    ('3', '3', '5'), ('3', '3', '6'), ('3', '3', '13'), ('3', '3', '14'), ('3', '3', '16'),
-    ('3', '3', '17'), ('3', '3', '19'), ('3', '3', '22'), ('3', '3', '24'), ('3', '3', '26'),
-    ('3', '3', '27'),
-    -- Cajero --
-    ('4', '4', '21'), ('4', '4', '23'), ('4', '4', '24'),('4', '4', '25'), ('4', '4', '26'),
-    ('4', '4', '27'),
-	-- Marketing --
-    ('5', '5', '13'),('5', '5', '14'),('5', '5', '15'),
-    ('5', '5', '16'), ('5', '5', '17'), ('5', '5', '24'),
-    -- Bodegero --
-    ('6', '6', '19'),('6', '6', '22');
+    INSERT INTO asignacionRolesOpciones(idRol, idOpcion) VALUES
+-- SysAdmin: Todos los permisos --
+('1', '1'), ('1', '2'), ('1', '3'), ('1', '4'), ('1', '5'),
+('1', '6'), ('1', '7'), ('1', '8'), ('1', '9'), ('1', '10'),
+('1', '11'), ('1', '12'), ('1', '13'), ('1', '14'), ('1', '15'),
+('1', '16'), ('1', '17'), ('1', '18'), ('1', '19'), ('1', '20'),
+('1', '21'), ('1', '22'), ('1', '23'), ('1', '24'), ('1', '25'),
+('1', '26'), ('1', '27'),
+-- Gerente --
+('2', '5'), ('2', '6'), ('2', '7'), ('2', '8'), ('2', '9'),
+('2', '12'), ('2', '19'), ('2', '22'), ('2', '24'), ('2', '26'),
+('2', '27'),
+-- Vendedor --
+('3', '5'), ('3', '6'), ('3', '13'), ('3', '14'), ('3', '16'),
+('3', '17'), ('3', '19'), ('3', '22'), ('3', '24'), ('3', '26'),
+('3', '27'),
+-- Cajero --
+('4', '21'), ('4', '23'), ('4', '24'), ('4', '25'), ('4', '26'),
+('4', '27'),
+-- Marketing --
+('5', '13'), ('5', '14'), ('5', '15'),
+('5', '16'), ('5', '17'), ('5', '24'),
+-- Bodegero --
+('6', '19'), ('6', '22'),
+-- Recursos Humanos --
+('7','5'), ('7','7');
+
     
     INSERT INTO usuarios(idUsuario, usuario, contrasenia, idRol, idEmpleado) values
     ('1', 'JuanRodas', 'Password1', '1', '1'),
@@ -782,4 +586,5 @@ insert into departamentos values
     ('3', 'RaulGarcia', 'Password3', '3', '3'),
     ('4', 'MaryPerez', 'Password4', '4', '4'),
     ('5', 'RaulReyes', 'Password5', '5', '5'),
-    ('6', 'PedroRamirez', 'Password6', '6', '6');
+    ('6', 'PedroRamirez', 'Password6', '6', '6'),
+    ('7', 'MariaAlejandra', 'Password7', '7', '7');
